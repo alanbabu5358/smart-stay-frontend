@@ -1,29 +1,33 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function Dashboard() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/users");
+        const data = await res.json();
+
+        console.log(data);
+        setUsers(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
     <div>
       <h2>Dashboard</h2>
 
-      <div className="grid">
-        <div className="card small">
-          <h3>Complaints</h3>
-          <p>Manage your maintenance requests</p>
-          <Link to="/complaints"><button>View</button></Link>
+      {users.map((user) => (
+        <div key={user.id}>
+          <p>{user.name}</p>
         </div>
-
-        <div className="card small">
-          <h3>Profile</h3>
-          <p>User information</p>
-          <button disabled>Coming Soon</button>
-        </div>
-
-        <div className="card small">
-          <h3>Payments</h3>
-          <p>Track payments</p>
-          <button disabled>Coming Soon</button>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }

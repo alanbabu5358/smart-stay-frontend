@@ -1,88 +1,58 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const handleRegister = () => {
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return;
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("http://localhost:3000/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, email, password })
+      });
+
+      if (res.ok) {
+        alert("Registered successfully");
+        navigate("/login");
+      }
+    } catch (err) {
+      console.error(err);
     }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    setError("");
-    alert(`Registered: ${firstName} ${lastName}`);
   };
 
   return (
-    <div className="card">
-      <h2>Create Account</h2>
+    <form onSubmit={handleRegister}>
+      <h2>Register</h2>
 
-      {error && <p className="error">{error}</p>}
-
-    <div className="name-row">
       <input
-         placeholder="First Name"
-         value={firstName}
-         onChange={(e) => setFirstName(e.target.value)}
+        type="text"
+        placeholder="Name"
+        onChange={(e) => setName(e.target.value)}
       />
 
-     <input
-        placeholder="Last Name"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-      />
-    </div>
-
-      {/* Email */}
       <input
         type="email"
         placeholder="Email"
-        value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
-      {/* Password */}
       <input
         type="password"
         placeholder="Password"
-        value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <small className="hint">Password must be at least 6 characters</small>
-
-      {/* Confirm Password */}
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-      />
-
-      {/* Button */}
-      <button
-        onClick={handleRegister}
-        disabled={
-          !firstName ||
-          !lastName ||
-          !email ||
-          !password ||
-          !confirmPassword
-        }
-      >
-        Register
-      </button>
-    </div>
+      <button type="submit">Register</button>
+    </form>
   );
 }
 

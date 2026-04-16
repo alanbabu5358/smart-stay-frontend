@@ -1,46 +1,61 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Complaints() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [complaints, setComplaints] = useState([]);
-  const [text, setText] = useState("");
 
-  const addComplaint = () => {
-    if (!text.trim()) return;
+  // Fetch complaints
+  useEffect(() => {
+    fetch("http://localhost:3000/api/complaints")
+      .then(res => res.json())
+      .then(data => setComplaints(data));
+  }, []);
 
-    setComplaints([
-      ...complaints,
-      { text: text, status: "Pending" }
-    ]);
+  // Submit complaint
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    setText("");
+    await fetch("http://localhost:3000/api/complaints", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ title, description })
+    });
+
+    alert("Complaint added!");
+
+    // refresh list
+    window.location.reload();
   };
 
   return (
-    <div className="card">
-      <h2>My Complaints</h2>
+    <div>
+      <h2>Complaints</h2>
 
-      <input
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Enter your complaint..."
-      />
+      <form onSubmit={handleSubmit}>
+        <input
+          placeholder="Title"
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-      <button onClick={addComplaint}>Add Complaint</button>
+        <input
+          placeholder="Description"
+          onChange={(e) => setDescription(e.target.value)}
+        />
 
-      <ul>
-        {complaints.length === 0 ? (
-          <p style={{ textAlign: "center", marginTop: "10px" }}>
-            No complaints yet
-          </p>
-        ) : (
-          complaints.map((c, index) => (
-            <li key={index}>
-              <span>{c.text}</span>
-              <span className="status">{c.status}</span>
-            </li>
-          ))
-        )}
-      </ul>
+        <button type="submit">Submit</button>
+      </form>
+
+      <h3>All Complaints</h3>
+
+      {complaints.map((c) => (
+        <div key={c.id}>
+          <p>{c.title}</p>
+          <p>{c.description}</p>
+        </div>
+      ))}
     </div>
   );
 }
