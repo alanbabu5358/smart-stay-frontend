@@ -12,7 +12,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:3000/api/users/register", {
+      const res = await fetch("https://smart-stay-backend-fbyj.onrender.com/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

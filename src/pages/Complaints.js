@@ -7,7 +7,7 @@ function Complaints() {
 
   // Fetch complaints
   useEffect(() => {
-    fetch("http://localhost:3000/api/complaints")
+    fetch("https://smart-stay-backend-fbyj.onrender.com/api/complaints")
       .then(res => res.json())
       .then(data => setComplaints(data));
   }, []);
@@ -16,7 +16,7 @@ function Complaints() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await fetch("http://localhost:3000/api/complaints", {
+    await fetch("https://smart-stay-backend-fbyj.onrender.com/api/complaints", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

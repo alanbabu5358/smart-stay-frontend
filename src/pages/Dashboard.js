@@ -6,7 +6,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/users");
+        const res = await fetch("https://smart-stay-backend-fbyj.onrender.com/api/users");
         const data = await res.json();
 
         console.log(data);
