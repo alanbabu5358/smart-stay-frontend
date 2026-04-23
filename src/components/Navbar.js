@@ -10,28 +10,41 @@ function Navbar() {
   };
 
   return (
-    <div className="navbar">
+    <nav className="navbar">
       <h2 className="logo">Smart Stay</h2>
 
       <div className="nav-links">
-
         {token ? (
           <>
-            <NavLink to="/dashboard">Dashboard</NavLink>
-            <NavLink to="/complaints">Complaints</NavLink>
-            <NavLink to="/admin">Admin</NavLink>
+            <NavLink to="/dashboard" className="nav-item">
+              Dashboard
+            </NavLink>
 
-            <button onClick={handleLogout}>Logout</button>
+            <NavLink to="/complaints" className="nav-item">
+              Complaints
+            </NavLink>
+
+            <NavLink to="/admin" className="nav-item">
+              Admin
+            </NavLink>
+
+            <button className="btn-nav" onClick={handleLogout}>
+              Logout
+            </button>
           </>
         ) : (
           <>
-            <NavLink to="/login">Login</NavLink>
-            <NavLink to="/register">Register</NavLink>
+            <NavLink to="/login" className="nav-item">
+              Login
+            </NavLink>
+
+            <NavLink to="/register" className="nav-item">
+              Register
+            </NavLink>
           </>
         )}
-
       </div>
-    </div>
+    </nav>
   );
 }
 
