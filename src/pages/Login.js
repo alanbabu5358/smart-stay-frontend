@@ -8,33 +8,31 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const res = await fetch("https://smart-stay-backend-fbyj.onrender.com/api/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, password })
-    });
+    try {
+      const res = await fetch("https://smart-stay-backend-fbyj.onrender.com/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password }) // ✅ correct fields
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    console.log("STATUS:", res.status);
-    console.log("RESPONSE:", data);
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        alert("Login successful");
+        navigate("/dashboard");
+      } else {
+        alert(data.message || "Login failed");
+      }
 
-    if (res.ok) {
-      localStorage.setItem("token", data.token);
-      alert("Login successful");
-      navigate("/dashboard");
-    } else {
-      alert(data.message || "Login failed");
+    } catch (err) {
+      console.error(err);
     }
-  } catch (err) {
-    console.error(err);
-  }
-};
+  };
 
   return (
     <form onSubmit={handleLogin}>

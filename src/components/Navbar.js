@@ -15,7 +15,6 @@ function Navbar() {
       <h2 className="logo">Smart Stay</h2>
 
       <div className="nav-links">
-        {/* Show only when logged in */}
         {token && (
           <>
             <NavLink to="/dashboard" className="nav-item">Dashboard</NavLink>
@@ -24,7 +23,6 @@ function Navbar() {
           </>
         )}
 
-        {/* If NOT logged in */}
         {!token ? (
           <>
             <NavLink to="/login" className="btn-nav">Login</NavLink>

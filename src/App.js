@@ -19,7 +19,8 @@ function App() {
 
       <div className="container">
         <Routes>
-          {/* Force login on first load */}
+
+          {/* Force login */}
           <Route
             path="/"
             element={token ? <Dashboard /> : <Navigate to="/login" />}
@@ -28,7 +29,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Protected Routes */}
           <Route
             path="/dashboard"
             element={
@@ -55,6 +55,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
         </Routes>
       </div>
     </Router>
