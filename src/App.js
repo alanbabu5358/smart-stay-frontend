@@ -1,9 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 
 import Navbar from "./components/Navbar";
 
-import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -12,17 +11,24 @@ import Admin from "./pages/Admin";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
+  const token = localStorage.getItem("token");
+
   return (
     <Router>
       <Navbar />
 
       <div className="container">
         <Routes>
-          <Route path="/" element={<Home />} />
+          {/* Force login on first load */}
+          <Route
+            path="/"
+            element={token ? <Dashboard /> : <Navigate to="/login" />}
+          />
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Protected Route */}
+          {/* Protected Routes */}
           <Route
             path="/dashboard"
             element={
@@ -32,8 +38,23 @@ function App() {
             }
           />
 
-          <Route path="/complaints" element={<Complaints />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route
+            path="/complaints"
+            element={
+              <ProtectedRoute>
+                <Complaints />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
     </Router>

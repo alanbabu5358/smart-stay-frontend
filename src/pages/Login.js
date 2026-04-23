@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
@@ -16,21 +16,20 @@ function Login() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ name, password })
+        body: JSON.stringify({ email, password })
       });
 
       const data = await res.json();
 
       if (res.ok) {
+        localStorage.setItem("token", data.token); // ✅ KEY PART
         alert("Login successful");
-        localStorage.setItem("token", data.token);
         navigate("/dashboard");
       } else {
-        alert(data.error);
+        alert(data.message || "Login failed");
       }
     } catch (err) {
       console.error(err);
-      alert("Login failed");
     }
   };
 
@@ -39,16 +38,14 @@ function Login() {
       <h2>Login</h2>
 
       <input
-        type="text"
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        type="email"
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
       />
 
       <input
         type="password"
         placeholder="Password"
-        value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
 

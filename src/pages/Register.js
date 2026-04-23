@@ -23,6 +23,8 @@ function Register() {
       if (res.ok) {
         alert("Registered successfully");
         navigate("/login");
+      } else {
+        alert("Registration failed");
       }
     } catch (err) {
       console.error(err);
