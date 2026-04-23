@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "./App.css";
 
 import Navbar from "./components/Navbar";
@@ -10,46 +10,65 @@ import Complaints from "./pages/Complaints";
 import Admin from "./pages/Admin";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
-  const token = localStorage.getItem("token");
+// 🔹 Wrapper to use useLocation
+function AppContent() {
+  const location = useLocation();
+
+  // ✅ Hide navbar on login/register
+  const hideNavbar =
+    location.pathname === "/login" || location.pathname === "/register";
 
   return (
-    <Router>
-      <Navbar />
+    <>
+      {!hideNavbar && <Navbar />}
 
       <div className="container">
         <Routes>
 
-          {/* Always redirect root */}
+          {/* Root always goes to login */}
           <Route path="/" element={<Navigate to="/login" />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Protected routes */}
+          {/* ✅ Use ProtectedRoute properly */}
           <Route
             path="/dashboard"
             element={
-              token ? <Dashboard /> : <Navigate to="/login" />
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/complaints"
             element={
-              token ? <Complaints /> : <Navigate to="/login" />
+              <ProtectedRoute>
+                <Complaints />
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/admin"
             element={
-              token ? <Admin /> : <Navigate to="/login" />
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
             }
           />
 
         </Routes>
       </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
