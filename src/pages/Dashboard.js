@@ -1,33 +1,31 @@
 import { useEffect, useState } from "react";
 
 function Dashboard() {
-  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await fetch("https://smart-stay-backend-fbyj.onrender.com/api/users");
-        const data = await res.json();
+    const token = localStorage.getItem("token");
 
-        console.log(data);
-        setUsers(data);
-      } catch (err) {
-        console.error(err);
+    fetch("https://smart-stay-backend-fbyj.onrender.com/api/users/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`
       }
-    };
-
-    fetchUsers();
+    })
+      .then(res => res.json())
+      .then(data => setUser(data));
   }, []);
 
+  if (!user) return <p>Loading...</p>;
+
   return (
-    <div>
+    <div className="dashboard-container">
       <h2>Dashboard</h2>
 
-      {users.map((user) => (
-        <div key={user.id}>
-          <p>{user.name}</p>
-        </div>
-      ))}
+      <div className="profile-card">
+        <h3>Welcome, {user.name}</h3>
+        <p><strong>Email:</strong> {user.email}</p>
+        <p><strong>ID:</strong> {user.id}</p>
+      </div>
     </div>
   );
 }

@@ -6,7 +6,6 @@ function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    alert("Logged out successfully");
     navigate("/login");
   };
 
@@ -15,24 +14,24 @@ function Navbar() {
       <h2 className="logo">Smart Stay</h2>
 
       <div className="nav-links">
+
         {token && (
           <>
-            <NavLink to="/dashboard" className="nav-item">Dashboard</NavLink>
-            <NavLink to="/complaints" className="nav-item">Complaints</NavLink>
-            <NavLink to="/admin" className="nav-item">Admin</NavLink>
+            <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to="/complaints">Complaints</NavLink>
+            <NavLink to="/admin">Admin</NavLink>
           </>
         )}
 
         {!token ? (
           <>
-            <NavLink to="/login" className="btn-nav">Login</NavLink>
-            <NavLink to="/register" className="btn-nav">Register</NavLink>
+            <NavLink to="/login">Login</NavLink>
+            <NavLink to="/register">Register</NavLink>
           </>
         ) : (
-          <button onClick={handleLogout} className="btn-nav">
-            Logout
-          </button>
+          <button onClick={handleLogout}>Logout</button>
         )}
+
       </div>
     </div>
   );

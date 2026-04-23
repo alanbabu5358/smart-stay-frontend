@@ -20,7 +20,6 @@ function App() {
       <div className="container">
         <Routes>
 
-          {/* Force login */}
           <Route
             path="/"
             element={token ? <Dashboard /> : <Navigate to="/login" />}
