@@ -31,31 +31,36 @@ function Register() {
     }
   };
 
-  return (
-    <form onSubmit={handleRegister}>
+return (
+  <div className="auth-container">
+    <form className="auth-card" onSubmit={handleRegister}>
       <h2>Register</h2>
 
       <input
         type="text"
         placeholder="Name"
         onChange={(e) => setName(e.target.value)}
+        required
       />
 
       <input
         type="email"
         placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
+        required
       />
 
       <input
         type="password"
         placeholder="Password"
         onChange={(e) => setPassword(e.target.value)}
+        required
       />
 
       <button type="submit">Register</button>
     </form>
-  );
+  </div>
+);
 }
 
 export default Register;

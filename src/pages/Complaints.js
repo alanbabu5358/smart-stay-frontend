@@ -1,61 +1,33 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Complaints() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [complaints, setComplaints] = useState([]);
 
-  // Fetch complaints
   useEffect(() => {
     fetch("https://smart-stay-backend-fbyj.onrender.com/api/complaints")
       .then(res => res.json())
-      .then(data => setComplaints(data));
+      .then(data => setComplaints(data))
+      .catch(err => console.error(err));
   }, []);
 
-  // Submit complaint
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    await fetch("https://smart-stay-backend-fbyj.onrender.com/api/complaints", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ title, description })
-    });
-
-    alert("Complaint added!");
-
-    // refresh list
-    window.location.reload();
-  };
-
   return (
-    <div>
+    <div className="complaints-container">
       <h2>Complaints</h2>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Title"
-          onChange={(e) => setTitle(e.target.value)}
-        />
-
-        <input
-          placeholder="Description"
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <button type="submit">Submit</button>
-      </form>
-
-      <h3>All Complaints</h3>
-
-      {complaints.map((c) => (
-        <div key={c.id}>
-          <p>{c.title}</p>
-          <p>{c.description}</p>
+      {complaints.length === 0 ? (
+        <p>No complaints found</p>
+      ) : (
+        <div className="complaints-grid">
+          {complaints.map((c) => (
+            <div key={c.id} className="complaint-card">
+              <h3>{c.title}</h3>
+              <p><strong>Description:</strong> {c.description}</p>
+              <p><strong>Status:</strong> {c.status}</p>
+              <p><strong>Date:</strong> {new Date(c.created_at).toLocaleDateString()}</p>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 }
