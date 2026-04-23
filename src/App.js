@@ -1,8 +1,6 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -10,28 +8,19 @@ import Complaints from "./pages/Complaints";
 import Admin from "./pages/Admin";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// 🔹 Wrapper to use useLocation
-function AppContent() {
-  const location = useLocation();
-
-  // ✅ Hide navbar on login/register
-  const hideNavbar =
-    location.pathname === "/login" || location.pathname === "/register";
-
+function App() {
   return (
-    <>
-      {!hideNavbar && <Navbar />}
+    <Router>
+      <Navbar /> {/* ✅ ALWAYS SHOW NAVBAR */}
 
       <div className="container">
         <Routes>
 
-          {/* Root always goes to login */}
           <Route path="/" element={<Navigate to="/login" />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* ✅ Use ProtectedRoute properly */}
           <Route
             path="/dashboard"
             element={
@@ -61,14 +50,6 @@ function AppContent() {
 
         </Routes>
       </div>
-    </>
-  );
-}
-
-function App() {
-  return (
-    <Router>
-      <AppContent />
     </Router>
   );
 }
