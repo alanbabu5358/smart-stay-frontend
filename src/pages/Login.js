@@ -10,34 +10,30 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://smart-stay-backend-fbyj.onrender.com/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-      });
+      const res = await fetch(
+        "https://smart-stay-backend-fbyj.onrender.com/api/users/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await res.json();
 
-      console.log("LOGIN RESPONSE:", data); // 🔍 DEBUG
+      console.log("LOGIN RESPONSE:", data);
 
       if (res.ok && data.token) {
-        // ✅ Save token FIRST
+        // ✅ Save token
         localStorage.setItem("token", data.token);
 
-        // 🔥 Force full reload so app updates
-        window.location.href = "/dashboard";
-
-        console.log("Token saved:", localStorage.getItem("token"));
-
-        // ✅ Then navigate
+        // ✅ Redirect properly
         navigate("/dashboard", { replace: true });
-
       } else {
         alert(data.message || "Login failed");
       }
-
     } catch (err) {
       console.error("Login error:", err);
     }

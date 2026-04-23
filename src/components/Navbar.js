@@ -1,11 +1,26 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function Navbar() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
+  // 🔥 Keeps navbar in sync with login/logout
+  useEffect(() => {
+    const syncToken = () => {
+      setToken(localStorage.getItem("token"));
+    };
+
+    window.addEventListener("storage", syncToken);
+
+    return () => {
+      window.removeEventListener("storage", syncToken);
+    };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    setToken(null);
     navigate("/login");
   };
 
