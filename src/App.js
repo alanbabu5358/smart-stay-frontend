@@ -1,6 +1,8 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import "./App.css";
 
 import Navbar from "./components/Navbar";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -8,19 +10,26 @@ import Complaints from "./pages/Complaints";
 import Admin from "./pages/Admin";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
+function AppLayout() {
+  const location = useLocation();
+
+  const hideNavbar =
+    location.pathname === "/login" || location.pathname === "/register";
+
   return (
-    <Router>
-      <Navbar /> {/* ✅ ALWAYS SHOW NAVBAR */}
+    <>
+      {!hideNavbar && <Navbar />}
 
       <div className="container">
         <Routes>
 
+          {/* default route */}
           <Route path="/" element={<Navigate to="/login" />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
+          {/* protected routes */}
           <Route
             path="/dashboard"
             element={
@@ -50,6 +59,14 @@ function App() {
 
         </Routes>
       </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppLayout />
     </Router>
   );
 }

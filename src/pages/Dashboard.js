@@ -8,7 +8,6 @@ function Dashboard() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    // ✅ If no token → go to login
     if (!token) {
       navigate("/login");
       return;
@@ -20,29 +19,18 @@ function Dashboard() {
       }
     })
       .then(res => {
-        // ✅ If token invalid → force logout
-        if (!res.ok) {
-          throw new Error("Unauthorized");
-        }
+        if (!res.ok) throw new Error("Unauthorized");
         return res.json();
       })
-      .then(data => {
-        setUser(data);
-      })
-      .catch(err => {
-        console.error(err);
-
-        // ✅ Remove bad token & redirect
+      .then(data => setUser(data))
+      .catch(() => {
         localStorage.removeItem("token");
         navigate("/login");
       });
 
   }, [navigate]);
 
-  // ✅ Loading state
-  if (!user) {
-    return <p>Loading profile...</p>;
-  }
+  if (!user) return <p>Loading profile...</p>;
 
   return (
     <div className="dashboard-container">

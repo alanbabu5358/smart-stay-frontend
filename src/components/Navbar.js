@@ -15,18 +15,18 @@ function Navbar() {
 
       <div className="nav-links">
 
-        {!token ? (
-          <>
-            <NavLink to="/login">Login</NavLink>
-            <NavLink to="/register">Register</NavLink>
-          </>
-        ) : (
+        {token ? (
           <>
             <NavLink to="/dashboard">Dashboard</NavLink>
             <NavLink to="/complaints">Complaints</NavLink>
             <NavLink to="/admin">Admin</NavLink>
 
             <button onClick={handleLogout}>Logout</button>
+          </>
+        ) : (
+          <>
+            <NavLink to="/login">Login</NavLink>
+            <NavLink to="/register">Register</NavLink>
           </>
         )}
 
