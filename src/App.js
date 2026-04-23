@@ -20,38 +20,31 @@ function App() {
       <div className="container">
         <Routes>
 
-          <Route
-            path="/"
-            element={token ? <Dashboard /> : <Navigate to="/login" />}
-          />
+          {/* Always redirect root */}
+          <Route path="/" element={<Navigate to="/login" />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
+          {/* Protected routes */}
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
+              token ? <Dashboard /> : <Navigate to="/login" />
             }
           />
 
           <Route
             path="/complaints"
             element={
-              <ProtectedRoute>
-                <Complaints />
-              </ProtectedRoute>
+              token ? <Complaints /> : <Navigate to="/login" />
             }
           />
 
           <Route
             path="/admin"
             element={
-              <ProtectedRoute>
-                <Admin />
-              </ProtectedRoute>
+              token ? <Admin /> : <Navigate to="/login" />
             }
           />
 
