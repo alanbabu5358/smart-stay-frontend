@@ -26,6 +26,9 @@ function Login() {
         // ✅ Save token FIRST
         localStorage.setItem("token", data.token);
 
+        // 🔥 Force full reload so app updates
+        window.location.href = "/dashboard";
+
         console.log("Token saved:", localStorage.getItem("token"));
 
         // ✅ Then navigate

@@ -1,27 +1,19 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const location = useLocation();
 
-  // ✅ Keep navbar in sync with localStorage
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setToken(localStorage.getItem("token"));
-    };
+  const token = localStorage.getItem("token");
 
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
+  // ✅ Hide navbar on login/register pages
+  if (location.pathname === "/login" || location.pathname === "/register") {
+    return null;
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setToken(null);
-    navigate("/login");
+    window.location.href = "/login"; // 🔥 force refresh
   };
 
   return (
@@ -30,23 +22,19 @@ function Navbar() {
 
       <div className="nav-links">
 
-        {/* ✅ Show only when logged in */}
-        {token && (
+        {token ? (
           <>
             <NavLink to="/dashboard">Dashboard</NavLink>
             <NavLink to="/complaints">Complaints</NavLink>
             <NavLink to="/admin">Admin</NavLink>
-          </>
-        )}
 
-        {/* ❌ Not logged in */}
-        {!token ? (
+            <button onClick={handleLogout}>Logout</button>
+          </>
+        ) : (
           <>
             <NavLink to="/login">Login</NavLink>
             <NavLink to="/register">Register</NavLink>
           </>
-        ) : (
-          <button onClick={handleLogout}>Logout</button>
         )}
 
       </div>
